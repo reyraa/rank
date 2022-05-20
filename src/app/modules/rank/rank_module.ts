@@ -8,6 +8,7 @@ import {
     AfterGenesisBlockApplyContext,
     // GenesisConfig
 } from 'lisk-sdk';
+import { RegisterAsset } from "./assets/register_asset";
 
 export class RankModule extends BaseModule {
     public actions = {
@@ -30,7 +31,9 @@ export class RankModule extends BaseModule {
 		// },
     };
     public name = 'rank';
-    public transactionAssets = [];
+    public transactionAssets = [
+        new RegisterAsset(),
+    ];
     public events = [
         // Example below
         // 'rank:newBlock',
