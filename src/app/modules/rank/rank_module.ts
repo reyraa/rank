@@ -6,9 +6,12 @@ import {
     TransactionApplyContext,
     BeforeBlockApplyContext,
     AfterGenesisBlockApplyContext,
+    StateStore,
     // GenesisConfig
 } from 'lisk-sdk';
 import { RegisterAsset } from "./assets/register_asset";
+import { rankAccountPropsSchema } from './data/account_props';
+import { RankAccountProps } from './data/account_props';
 
 export class RankModule extends BaseModule {
     public actions = {
@@ -17,18 +20,17 @@ export class RankModule extends BaseModule {
         // getBlockByID: async (params) => this._dataAccess.blocks.get(params.id),
     };
     public reducers = {
-        // Example below
-        // getBalance: async (
-		// 	params: Record<string, unknown>,
-		// 	stateStore: StateStore,
-		// ): Promise<bigint> => {
-		// 	const { address } = params;
-		// 	if (!Buffer.isBuffer(address)) {
-		// 		throw new Error('Address must be a buffer');
-		// 	}
-		// 	const account = await stateStore.account.getOrDefault<TokenAccount>(address);
-		// 	return account.token.balance;
-		// },
+        getName: async (
+			params: Record<string, unknown>,
+			stateStore: StateStore,
+		): Promise<string> => {
+			const { address } = params;
+			if (!Buffer.isBuffer(address)) {
+				throw new Error('Address must be a buffer');
+			}
+			const account = await stateStore.account.getOrDefault<RankAccountProps>(address);
+			return account.rank.name;
+		},
     };
     public name = 'rank';
     public transactionAssets = [
@@ -39,6 +41,7 @@ export class RankModule extends BaseModule {
         // 'rank:newBlock',
     ];
     public id = 1000;
+    public accountSchema = rankAccountPropsSchema;
 
     // public constructor(genesisConfig: GenesisConfig) {
     //     super(genesisConfig);
